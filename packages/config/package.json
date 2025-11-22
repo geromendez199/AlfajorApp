@@ -1,0 +1,6 @@
+{
+  "name": "@alfajor/config",
+  "version": "0.1.0",
+  "main": "tailwind-preset.js",
+  "files": ["tailwind-preset.js", "tsconfig.base.json"]
+}

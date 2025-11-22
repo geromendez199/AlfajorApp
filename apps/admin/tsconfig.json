@@ -1,0 +1,14 @@
+{
+  "extends": "@alfajor/config/tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "preserve",
+    "allowJs": true,
+    "types": ["node", "@types/react"],
+    "paths": {
+      "@alfajor/ui": ["../../packages/ui"],
+      "@alfajor/types": ["../../packages/types"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
+}
