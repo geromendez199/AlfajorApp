@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlfajorApp - La Cata Definitiva</title>
+    <style>
+        /* --- ESTILOS MODERNOS (CSS) --- */
+        :root {
+            --primary: #5D4037; /* Color Chocolate */
+            --secondary: #D7CCC8; /* Color Dulce de Leche claro */
+            --accent: #FF7043;
+            --bg: #F5F5F5;
+            --text: #3E2723;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        header h1 { margin: 0; font-size: 2.5rem; }
+        header p { opacity: 0.9; font-style: italic; }
+
+        /* Contenedor Principal */
+        main {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Buscador */
+        .search-box {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            box-sizing: border-box; /* Importante para padding */
+        }
+
+        /* Grilla de Alfajores */
+        #alfajor-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* Tarjeta de Alfajor */
+        .card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .card-header {
+            background-color: var(--secondary);
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .card h3 { margin: 0 0 0.5rem 0; color: var(--primary); }
+        .brand { font-size: 0.9rem; color: #777; margin-bottom: 1rem; display: block;}
+        
+        .rating {
+            color: #FFC107; /* Estrella amarilla */
+            font-weight: bold;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            font-size: 0.8rem;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🍩 AlfajorApp</h1>
+        <p>Ranking de los mejores alfajores del mundo</p>
+    </header>
+
+    <main>
+        <input type="text" id="searchInput" class="search-box" placeholder="Buscar alfajor (ej. Guaymallén, Havanna...)">
+
+        <div id="alfajor-list">
+            </div>
+    </main>
+
+    <footer>
+        <p>Desarrollado con pasión y dulce de leche por geromendez199</p>
+    </footer>
+
+    <script>
+        // --- LÓGICA (JAVASCRIPT) ---
+        
+        // 1. Base de datos de alfajores (¡Puedes agregar más aquí!)
+        const alfajores = [
+            { nombre: "Clásico de Chocolate", marca: "Havanna", puntaje: 5.0, icono: "🍫" },
+            { nombre: "Capitán del Espacio", marca: "Kilómetro Sur", puntaje: 4.8, icono: "🚀" },
+            { nombre: "De Fruta", marca: "Guaymallén", puntaje: 3.5, icono: "🍏" },
+            { nombre: "Bon o Bon", marca: "Arcor", puntaje: 4.2, icono: "🍬" },
+            { nombre: "Santafesino", marca: "Merengo", puntaje: 4.9, icono: "🇦🇷" },
+            { nombre: "Jorgito de Chocolate", marca: "Jorgito", puntaje: 4.5, icono: "🍩" },
+            { nombre: "Oreo", marca: "Milka", puntaje: 4.1, icono: "🍪" }
+        ];
+
+        const listaEl = document.getElementById('alfajor-list');
+        const searchInput = document.getElementById('searchInput');
+
+        // 2. Función para mostrar los alfajores
+        function renderAlfajores(filtro = "") {
+            listaEl.innerHTML = ""; // Limpiar lista
+            
+            const filtrados = alfajores.filter(a => 
+                a.nombre.toLowerCase().includes(filtro.toLowerCase()) || 
+                a.marca.toLowerCase().includes(filtro.toLowerCase())
+            );
+
+            if (filtrados.length === 0) {
+                listaEl.innerHTML = "<p style='grid-column: 1/-1; text-align: center;'>No encontramos ese alfajor 😢</p>";
+                return;
+            }
+
+            filtrados.forEach(alfajor => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="card-header">${alfajor.icono}</div>
+                    <div class="card-body">
+                        <h3>${alfajor.nombre}</h3>
+                        <span class="brand">${alfajor.marca}</span>
+                        <div class="rating">⭐ ${alfajor.puntaje}/5</div>
+                    </div>
+                `;
+                listaEl.appendChild(card);
+            });
+        }
+
+        // 3. Evento de búsqueda
+        searchInput.addEventListener('input', (e) => {
+            renderAlfajores(e.target.value);
+        });
+
+        // Cargar al inicio
+        renderAlfajores();
+    </script>
+</body>
+</html>
