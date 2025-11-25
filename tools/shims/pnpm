@@ -1,0 +1,22 @@
+#!/usr/bin/env node
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
+
+const args = process.argv.slice(2);
+const scriptName = args.at(-1) ?? null;
+const filterIndex = args.findIndex((arg) => arg === '--filter');
+const filterValue = filterIndex !== -1 ? args[filterIndex + 1] : null;
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const repoRoot = join(__dirname, '..', '..');
+
+if (scriptName === 'lint' && (!filterValue || filterValue === 'admin')) {
+  const lintScript = join(repoRoot, 'apps', 'admin', 'scripts', 'lint.mjs');
+  const result = spawnSync('node', [lintScript], { stdio: 'inherit' });
+  process.exit(result.status ?? 0);
+}
+
+console.error('\nThis offline pnpm shim only supports "pnpm --filter admin lint".');
+console.error('Please install pnpm in your environment for other commands.');
+process.exit(1);
